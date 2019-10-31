@@ -30,37 +30,35 @@ void initialize_r(struct room r[],int size,int floor_no)                    // i
 	}	
 }
 
-void assign(struct student same_hostel[],struct student new_stud[],struct student out_stud[],struct student diff_hostel[],int size)
+void assign(struct student same_hostel[],struct student new_stud[],struct student out_stud[],struct student diff_hostel[],int size, int *sh_c, int *ns_c, int *os_c, int *dh_c)
 {
 	FILE *f; 							//assigns the applications to four
 	struct student st; 						//different arrays according to their
-	int sh_count,ns_count,os_count,dh_count;  			//decreasing preferences of processing
-	sh_count=ns_count=os_count=dh_count=0;
 	f=fopen("student.dat","rb");
 	while(fread(&st, sizeof(struct student), 1, f))
 	{
 		if(st.hostel_no == 1)
 		{
 			same_hostel[sh_count]=st;
-			sh_count++;
+			(*sh_c)++;
 		}
 		else if(st.hostel_no == -1)
 		{
 			if(st.year == 1)
 			{
 				new_stud[ns_count]=st;
-				ns_count++;
+				(*ns_c)++;
 			}
 			else
 			{
 				out_stud[os_count]=st;
-				os_count++;
+				(*os_c)++;
 			}	
 		}
 		else 
 		{
 			diff_hostel[dh_count]=st;
-			dh_count++;
+			(*dh_c)++;
 		}
 	}
 	fclose(f);
