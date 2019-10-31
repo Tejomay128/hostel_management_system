@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include string.h>
 
 struct preference				//only for 2nd,3rd and 4th year students
 {
@@ -26,4 +27,5 @@ struct student 					//student data
 	struct preference p;
 };
 
-void initialize(struct student s[],int size);     // initilize data id=year=hostel_no=floor_no=room_no=id_roomate=-1, name=dept='\0'
+void initialize_s(struct student s[], int size); // initilize data id=year=hostel_no=floor_no=room_no=id_roomate=-1, name=dept='\0'
+void initialize_r(struct room r[], int size);
