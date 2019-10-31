@@ -16,9 +16,10 @@ void initialize_r(struct room r[],int size)                    // initilize data
 	int i;
 	for(i=0;i<size;i++)
 	{
-		r[i].room_no=-1;
+		r[i].vacancy=-1;
 		r[i].id1=-1;
 		r[i].id2=-1;
+		r[i].room_no=-1;
 	}	
 }
 
