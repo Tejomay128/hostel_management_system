@@ -29,4 +29,7 @@ struct student 					//student data
 };
 
 void initialize_s(struct student s[], int size); // initilize data id=year=hostel_no=floor_no=room_no=id_roomate=-1, name=dept='\0'
-void initialize_r(struct room r[], int size);
+void initialize_r(struct room r[], int size, int floor_no);    // // initialize everything to -1 except room nos.,that will be assigned as per no. of floors available per floor
+void assign(struct student same_hostel[],struct student new_stud[],struct student outside[],struct student diff_hostel[],int size); //assigns the applications to four
+																    //different arrays according to their 
+																    //decreasing preferences of processing
