@@ -3,8 +3,8 @@
 
 struct preference				//only for 2nd,3rd and 4th year students
 {
-	int floor_pref;			//will take values as floor nos.
-	int roommate_pref;		//will take 10 student IDs according to prefernce order
+	int floor_pref;		
+	int roommate_pref;	
 };
 
 struct room 					//room data
