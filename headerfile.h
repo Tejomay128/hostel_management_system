@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include string.h>
+#include <string.h>
 
 struct preference				//only for 2nd,3rd and 4th year students
 {
