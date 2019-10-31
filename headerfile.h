@@ -9,7 +9,7 @@ struct preference				//only for 2nd,3rd and 4th year students
 
 struct room 					//room data
 {
-	static int room_no;  
+	int room_no;  
 	int id1; 			//student IDs who are occupying the rooms
 	int id2;
 	int vacancy;
