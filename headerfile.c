@@ -74,7 +74,7 @@ int assign(struct student old_stud[],struct student new_stud[],int size, int *sh
 	return j;  									//the size of old_stud[] is returned
 }
 
-int new_stud_allocate(int new_stud[], int room[], int new_stud_size, int room_size)
+int new_stud_allocate(struct student new_stud[], struct room room[], int new_stud_size, int room_size)
 {
 	int ret_val, i, j, floor_room;
 	floor_room=(room_size/4)-2;		// number of rooms on first floor, taking care of guest rooms
