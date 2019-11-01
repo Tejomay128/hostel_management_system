@@ -30,11 +30,12 @@ void initialize_r(struct room r[],int size,int floor_no)                    // i
 	}	
 }
 
-void assign(struct student same_hostel[],struct student new_stud[],struct student out_stud[],struct student diff_hostel[],int size, int *sh_c, int *ns_c, int *os_c, int *dh_c)
-{
-	FILE *f; 							//assigns the applications to four
-	struct student st; 						//different arrays according to their
-	f=fopen("student.dat","rb");
+int assign(struct student old_stud[],struct student new_stud[],int size, int *sh_c, int *ns_c, int *os_c, int *dh_c) 	//assigns the applications to four
+{															//different arrays according to their
+	FILE *f; 							    						//decreasing preferences of processing
+	struct student st,same_hostel[size],out_stud[size],diff_hostel[size];
+	int i,j; 																		
+	f=fopen("student.dat","rb"); 															
 	while(fread(&st, sizeof(struct student), 1, f))
 	{
 		if(st.hostel_no == 1)
@@ -61,5 +62,21 @@ void assign(struct student same_hostel[],struct student new_stud[],struct studen
 			(*dh_c)++;
 		}
 	}
+	j=0;
 	fclose(f);
+	for(i=0;i<sh_count;i++) 					//from here,the array old_stud[] is filled with details in preference order
+	{
+		old_stud[j]=same_hostel[i];         
+		j++;
+	}
+	for(i=0;i<os_count;i++)
+	{
+		old_stud[j]=out_stud[i];
+		j++;
+	}
+	for(i=0;i<size;i++)
+	{
+		old_stud[j]=diff_hostel[i];
+	}
+	return j;  									//the size of old_stud[] is returned
 }
