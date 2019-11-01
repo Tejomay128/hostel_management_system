@@ -128,3 +128,75 @@ int find_index(struct student old_stud[], int size, int id)  //returns index whe
 	}
 	return pos;
 }
+
+void old_stud_allocate(struct student old_stud[], struct room room[], int old_stud_size, int room_size, int *r2, int *r3, int *r4)
+{
+	int x, y, z, i, j;
+	i=0;
+	while(i<old_stud_size)		//for assigning roommates based on roommate preference
+	{
+		j=find_index(old_stud, old_stud_size, old_stud[i].p.roommate_pref);
+		if(old_stud[i].roommate_id==-1&&(old_stud[j].p.roommate_pref=old_stud[i].id||old_stud[j].roommate_id==-1))
+		{											//if both don't have roommates or if both are each others' preferred roommate
+			if(old_stud[j].roommate_id!=-1)
+			{										//if other guy has a roommate he does not prefer
+				x=find_index(old_stud, old_stud_size, old_stud[j].roommate_id);
+				old_stud[x].roommate_id=-1;
+			}
+			old_stud[i].roommate_id=old_stud[j].id;		//assigning them as roommates
+			old_stud[j].roommate_id=old_stud[i].id;
+		}
+		i++;
+	}
+	i=0;
+	while(i<old_stud_size)		//for assigning roommates based on floor preference
+	{
+		if(old_stud[i].roommate_id=-1)
+		{
+			j=i;
+			x=0;
+			while(j<old_stud_size&&x==0)
+			{
+				if(old_stud[i].p.floor_pref==old_stud[j].p.floor_pref)
+				{												//if both prefer same floor
+					old_stud[i].roommate_id=old_stud[j].id;		//assigning them as roommates
+					old_stud[j].roommate_id=old_stud[i].id;
+					x=1;
+				}
+				j++;
+			}
+		}
+		i++;
+	}
+	(*r2)=(*r3)=(*r4)=0;		//for storing index of next room on that floor to be occupied
+	i=0;
+	while(i<old_stud_size)		//for assigning rooms to roommate pairs
+	{
+		if(old_stud[i].room_no==-1)
+		{
+			j=find_index(old_stud, old_stud_size, old_stud[i].roommate_id);
+			x=old_stud[i].p.floor_pref;		//checking for floor preference
+			switch(x)						//x stores floor number
+			{
+				case 2:	y=(*r2);	break;		//y stores index of room in room[]
+				case 3: y=(*r3);	break;
+				case 4: y=(*r4);
+			}
+			if(y<(room_size/4))			//if floor has vacant rooms
+			{
+				z=((x-1)*(room_size)/4)+y;		
+				room[z].id1=old_stud[i].id;		//updating room and student details
+				room[z].id2=old_stud[j].id;
+				room[z].vacancy=1;
+				old_stud[i].hostel_no=old_stud[j].hostel_no=1;
+				old_stud[i].floor_no=old_stud[j].floor_no=x;
+				old_stud[i].room_no=old_stud[j].room_no=room[z].room_no;
+			}
+		}
+		i++;
+	}
+	(*r2)=2*((room_size/4)-(*r2)-1);		//now *r2, *r3 and *r4 will store number of vacant seats in their respective floors
+	(*r3)=2*((room_size/4)-(*r3)-1);
+	(*r4)=2*((room_size/4)-(*r4)-1);
+	return;
+}
