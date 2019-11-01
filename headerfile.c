@@ -19,7 +19,7 @@ void initialize_r(struct room r[],int size,int floor_no)                    // i
 		r[i].vacancy=-1;
 		r[i].id1=-1;
 		r[i].id2=-1;
-		r[i].room_no=(1000*floor_no)+i;
+		r[i].room_no=(1001*floor_no)+i;
 	}	
 }
 
