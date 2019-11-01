@@ -115,3 +115,16 @@ int new_stud_allocate(struct student new_stud[], struct room room[], int new_stu
 	}
 	return ret_val;		//holds number of vacant seats on first floor
 }
+
+int find_index(struct student old_stud[], int size, int id)  //returns index where id is found, if not found returns -1
+{
+	int i,pos=-1;
+	for(i=0;i<size && pos==-1;i++)
+	{
+		if(id == old_stud[i].id)
+		{
+			pos = i;
+		}
+	}
+	return pos;
+}
