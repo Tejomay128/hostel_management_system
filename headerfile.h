@@ -35,3 +35,5 @@ void initialize_r(struct room[], int, int);    					// initialize everything to 
 int assign(struct student[],struct student[],int, int*, int*, int*, int*); //assigns the applications to four
 																												//different arrays according to their 
 																												//decreasing preferences of processing
+
+int new_stud_allocate(struct student[], struct room[], int, int); 	//allocates rooms to new applicants
