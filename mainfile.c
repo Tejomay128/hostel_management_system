@@ -9,7 +9,7 @@ int main()
 	int choice,sh_c,ns_c,os_c,dh_c, old_sz;
 	int f1, f2, f3, f4, i, floor_pref_count, roommate_pref_count;
 	f2=f3=f4=0;
-	char repeat;
+	char repeat='\0';
 	initialize_s(old_stud, N);
 	initialize_s(new_stud, N);
 	initialize_r(room,K/8,1);
@@ -57,7 +57,7 @@ int main()
 			default : 	printf("\nWrong choice.");		
 		}
 		printf("\n\nDo you want to repeat? (y/n):");
-		scanf("%d",&repeat);
+		scanf("%c",&repeat);
 	}while(repeat == 'y' || repeat == 'Y');
 	return 0;
 }
