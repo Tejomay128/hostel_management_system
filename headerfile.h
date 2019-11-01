@@ -24,7 +24,7 @@ struct student 					//student data
 	int hostel_no;
 	int floor_no;
 	int room_no;
-	int id_roommate;
+	int roommate_id;
 	struct preference p;
 };
 
