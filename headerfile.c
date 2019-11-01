@@ -5,7 +5,7 @@ void initialize_s(struct student s[],int size)                    // initilize d
 	int i;
 	for(i=0;i<size;i++)
 	{
-		s[i].id=s[i].year=s[i].hostel_no=s[i].floor_no=s[i].room_no=s[i].id_roommate=-1;
+		s[i].id=s[i].year=s[i].hostel_no=s[i].floor_no=s[i].room_no=s[i].roommate_id=-1;
 		s[i].name[0]='\0';
 		s[i].dept[0]='\0';
 	}	
@@ -86,8 +86,8 @@ int new_stud_allocate(struct student new_stud[], struct room room[], int new_stu
 		if(j+1 < new_stud_size)      //assigning rooms
 		{
 			new_stud[j].room_no=new_stud[j+1].room_no=room[i].room_no;		
-			room[i].id1=new_stud[j+1].id_roommate=new_stud[j].id;
-			room[i].id2=new_stud[j].id_roommate=new_stud[j+1].id;
+			room[i].id1=new_stud[j+1].roommate_id=new_stud[j].id;
+			room[i].id2=new_stud[j].roommate_id=new_stud[j+1].id;
 			new_stud[j].hostel_no=new_stud[j+1].hostel_no=new_stud[j].floor_no=new_stud[j+1].floor_no=1;
 			room[i].vacancy=1;
 			i++;
@@ -136,7 +136,7 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 	while(i<old_stud_size)		//for assigning roommates based on roommate preference
 	{
 		j=find_index(old_stud, old_stud_size, old_stud[i].p.roommate_pref);
-		if(old_stud[i].roommate_id==-1&&(old_stud[j].p.roommate_pref=old_stud[i].id||old_stud[j].roommate_id==-1))
+		if(old_stud[i].roommate_id==-1 && (old_stud[j].p.roommate_pref==old_stud[i].id || old_stud[j].roommate_id==-1))
 		{											//if both don't have roommates or if both are each others' preferred roommate
 			if(old_stud[j].roommate_id!=-1)
 			{										//if other guy has a roommate he does not prefer
@@ -151,11 +151,12 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 	i=0;
 	while(i<old_stud_size)		//for assigning roommates based on floor preference
 	{
-		if(old_stud[i].roommate_id=-1)
+		if(old_stud[i].roommate_id == -1)
 		{
-			j=i;
+			j=i+1;
 			x=0;
-			while(j<old_stud_size&&x==0)
+			while(j<old_stud_size && x==0 && old_stud[j
+				].roommate_id==-1)
 			{
 				if(old_stud[i].p.floor_pref==old_stud[j].p.floor_pref)
 				{												//if both prefer same floor
@@ -178,9 +179,9 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 			x=old_stud[i].p.floor_pref;		//checking for floor preference
 			switch(x)						//x stores floor number
 			{
-				case 2:	y=(*r2);	break;		//y stores index of room in room[]
-				case 3: y=(*r3);	break;
-				case 4: y=(*r4);
+				case 2:	y=(*r2);    (*r2)++;		break;		//y stores index of room in room[]
+				case 3: y=(*r3);	(*r3)++;        break;
+				case 4: y=(*r4);    (*r4)++;
 			}
 			if(y<(room_size/4))			//if floor has vacant rooms
 			{
@@ -195,8 +196,8 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 		}
 		i++;
 	}
-	(*r2)=2*((room_size/4)-(*r2)-1);		//now *r2, *r3 and *r4 will store number of vacant seats in their respective floors
-	(*r3)=2*((room_size/4)-(*r3)-1);
-	(*r4)=2*((room_size/4)-(*r4)-1);
+	(*r2)=2*((room_size/4)-(*r2));		//now *r2, *r3 and *r4 will store number of vacant seats in their respective floors
+	(*r3)=2*((room_size/4)-(*r3));
+	(*r4)=2*((room_size/4)-(*r4));
 	return;
 }
