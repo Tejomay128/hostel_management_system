@@ -78,24 +78,39 @@ int new_stud_allocate(struct student new_stud[], struct room room[], int new_stu
 {
 	int ret_val, i, j, floor_room;
 	floor_room=(room_size/4)-2;		// number of rooms on first floor, taking care of guest rooms
-	i=j=1;
-	while((i<=floor_room)&&(j<=new_stud_size))
+	i=j=0;
+	ret_val=0;
+	while((i<floor_room)&&(j<new_stud_size))
 	{
-		new_stud[j].room_no=new_stud[j+1].room_no=room[i].room_no;		//updating student and room details
-		room[i].id1=new_stud[j+1].id_roomate=new_stud[j].id;
-		room[i].id2=new_stud[j].id_roommate=new_stud[j+1].id;
-		new_stud[j].hostel_no=new_stud[j+1].hostel_no=new_stud[j].floor_no=new_stud[j+1].floor_no=1;
-		room[i].vacancy=1;
-		i++;
-		j=j+2;
+		if(j+1 < new_stud_size)      //assigning rooms
+		{
+			new_stud[j].room_no=new_stud[j+1].room_no=room[i].room_no;		
+			room[i].id1=new_stud[j+1].id_roomate=new_stud[j].id;
+			room[i].id2=new_stud[j].id_roommate=new_stud[j+1].id;
+			new_stud[j].hostel_no=new_stud[j+1].hostel_no=new_stud[j].floor_no=new_stud[j+1].floor_no=1;
+			room[i].vacancy=1;
+			i++;
+			j=j+2;
+		}	
+		else
+		{
+			new_stud[j].room_no=room[i].room_no;
+			room[i].id1=new_stud[j].id;
+			new_stud[j].hostel_no=new_stud[j].floor_no=1;
+			i++;
+			j++;
+		}
 	}
-	if(j<=new_stud_size)		//if there are applicants left but rooms filled
+	if(j<new_stud_size)		//if there are applicants left but rooms filled
 	{
 		ret_val=0;
 	}
-	else if(i<=floor_room)		//if applicants are done before all rooms filled
+	else if(i<floor_room)		//if applicants are done before all rooms filled
 	{
-		ret_val=floor_room-i;
+		if(new_stud_size%2 == 0)
+			ret_val = 2*(floor_room-i);
+		else
+			ret_val = 2*(floor_room-i) + 1;
 	}
-	return ret_val;		//holds number of vacant rooms on first floor
+	return ret_val;		//holds number of vacant seats on first floor
 }
