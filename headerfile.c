@@ -24,10 +24,11 @@ void initialize_r(struct room r[],int size,int floor_no)                    // i
 }
 
 int assign(struct student old_stud[],struct student new_stud[],int size, int *sh_c, int *ns_c, int *os_c, int *dh_c) 	//assigns the applications to four
-{															//different arrays according to their
-	FILE *f; 							    						//decreasing preferences of processing
+{																														//different arrays according to their
+	FILE *f; 							    																			//decreasing preferences of processing
 	struct student st,same_hostel[size],out_stud[size],diff_hostel[size];
-	int i,j; 																		
+	int i,j,sh_count,ns_count,os_count,dh_count;
+	sh_count=ns_count=os_count=dh_count=0; 																		
 	f=fopen("student.dat","rb"); 															
 	while(fread(&st, sizeof(struct student), 1, f))
 	{
@@ -85,7 +86,7 @@ int new_stud_allocate(struct student new_stud[], struct room room[], int new_stu
 		if(j+1 < new_stud_size)      //assigning rooms
 		{
 			new_stud[j].room_no=new_stud[j+1].room_no=room[i].room_no;		
-			room[i].id1=new_stud[j+1].id_roomate=new_stud[j].id;
+			room[i].id1=new_stud[j+1].id_roommate=new_stud[j].id;
 			room[i].id2=new_stud[j].id_roommate=new_stud[j+1].id;
 			new_stud[j].hostel_no=new_stud[j+1].hostel_no=new_stud[j].floor_no=new_stud[j+1].floor_no=1;
 			room[i].vacancy=1;
