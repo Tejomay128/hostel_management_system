@@ -28,16 +28,16 @@ struct student 					//student data
 	struct preference p;
 };
 
-void initialize_s(struct student[], int);      					// initilize data id=year=hostel_no=floor_no=room_no=id_roomate=-1, name=dept='\0'
+void initialize_s(struct student s[], int size);      					// initilize data id=year=hostel_no=floor_no=room_no=id_roomate=-1, name=dept='\0'
 
-void initialize_r(struct room[], int, int);    					// initialize everything to -1 except room nos.,that will be assigned as per no. of floors available per floor
+void initialize_r(struct room r[], int size, int floor_no);    					// initialize everything to -1 except room nos.,that will be assigned as per no. of floors available per floor
 
-int assign(struct student[],struct student[],int, int*, int*, int*, int*); //assigns the applications to four
+int assign(struct student old_stud[], struct student new_stud[], int size, int *sh_c, int *ns_c, int *os_c, int *dh_c); //assigns the applications to four
 																												//different arrays according to their 
 																												//decreasing preferences of processing
 
-int new_stud_allocate(struct student[], struct room[], int, int); 	//allocates rooms to new applicants
+int new_stud_allocate(struct student new_stud[], struct room room[], int new_stud_size, int room_size); 	//allocates rooms to new applicants
 
-void old_stud_allocate(struct student[], struct room[], int, int, int*, int*, int*);	//allocates rooms to old students
+void old_stud_allocate(struct student old_stud[], struct room room[], int old_stud_size, int room_size, int *r2, int *r3, int *r4);	//allocates rooms to old students
 
-int find_index(struct student[], int, int);   //returns index where id is found, if not found returns -1
+int find_index(struct student old_stud[], int size, int id);   //returns index where id is found, if not found returns -1
