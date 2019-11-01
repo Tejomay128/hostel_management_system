@@ -12,6 +12,10 @@ int main()
 	char repeat;
 	initialize_s(old_stud, N);
 	initialize_s(new_stud, N);
+	initialize_r(room,K/8,1);
+	initialize_r(room,K/8,2);
+	initialize_r(room,K/8,3);
+	initialize_r(room,K/8,4);
 	sh_c=ns_c=os_c=dh_c=0;    // sh_c = students who want same hostel,ns_c = new students,os_c = seniors living outside,dh_c = students from different hostel
 	old_sz=assign(old_stud, new_stud, N, &sh_c, &ns_c, &os_c, &dh_c);
 	f1=new_stud_allocate(new_stud, room, ns_c, K/2);
