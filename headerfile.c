@@ -16,10 +16,10 @@ void initialize_r(struct room r[],int size,int floor_no)                    // i
 	int i;
 	for(i=0;i<size;i++)
 	{
-		r[i].vacancy=-1;
-		r[i].id1=-1;
-		r[i].id2=-1;
-		r[i].room_no=(1001*floor_no)+i;
+		r[i + (floor_no-1)*size].vacancy=-1;
+		r[i + (floor_no-1)*size].id1=-1;
+		r[i + (floor_no-1)*size].id2=-1;
+		r[i + (floor_no-1)*size].room_no=(1001*floor_no)+i;
 	}	
 }
 
@@ -192,18 +192,13 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 				y = *r4;
 				(*r4)++;
 			}
-
-
-			if(y<(room_size/4))			//if floor has vacant rooms
-			{
-				z=((x-1)*(room_size)/4)+y;		
-				room[z].id1=old_stud[i].id;		//updating room and student details
-				room[z].id2=old_stud[j].id;
-				room[z].vacancy=1;
-				old_stud[i].hostel_no=old_stud[j].hostel_no=1;
-				old_stud[i].floor_no=old_stud[j].floor_no=x;
-				old_stud[i].room_no=old_stud[j].room_no=room[z].room_no;
-			}
+			z=((x-1)*(room_size)/4)+y;		
+			room[z].id1=old_stud[i].id;		//updating room and student details
+			room[z].id2=old_stud[j].id;
+			room[z].vacancy=1;
+			old_stud[i].hostel_no=old_stud[j].hostel_no=1;
+			old_stud[i].floor_no=old_stud[j].floor_no=x;
+			old_stud[i].room_no=old_stud[j].room_no=room[z].room_no;
 		}
 		i++;
 	}
