@@ -38,4 +38,6 @@ int assign(struct student[],struct student[],int, int*, int*, int*, int*); //ass
 
 int new_stud_allocate(struct student[], struct room[], int, int); 	//allocates rooms to new applicants
 
+void old_stud_allocate(struct student[], struct room[], int, int, int*, int*, int*);	//allocates rooms to old students
+
 int find_index(struct student[], int, int);   //returns index where id is found, if not found returns -1
