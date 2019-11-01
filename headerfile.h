@@ -37,3 +37,5 @@ int assign(struct student[],struct student[],int, int*, int*, int*, int*); //ass
 																												//decreasing preferences of processing
 
 int new_stud_allocate(struct student[], struct room[], int, int); 	//allocates rooms to new applicants
+
+int find_index(struct student[], int, int);   //returns index where id is found, if not found returns -1
