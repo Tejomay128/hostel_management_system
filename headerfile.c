@@ -155,8 +155,7 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 		{
 			j=i+1;
 			x=0;
-			while(j<old_stud_size && x==0 && old_stud[j
-				].roommate_id==-1)
+			while(j<old_stud_size && x==0 && old_stud[j].roommate_id==-1)
 			{
 				if(old_stud[i].p.floor_pref==old_stud[j].p.floor_pref)
 				{												//if both prefer same floor
@@ -176,13 +175,25 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 		if(old_stud[i].room_no==-1)
 		{
 			j=find_index(old_stud, old_stud_size, old_stud[i].roommate_id);
-			x=old_stud[i].p.floor_pref;		//checking for floor preference
-			switch(x)						//x stores floor number
+			x=old_stud[i].p.floor_pref;		                //checking for floor preference      
+			
+			if(x==2 && (*r2)<(room_size/4))
 			{
-				case 2:	y=(*r2);    (*r2)++;		break;		//y stores index of room in room[]
-				case 3: y=(*r3);	(*r3)++;        break;
-				case 4: y=(*r4);    (*r4)++;
+				y = *r2;
+				(*r2)++;
 			}
+			else if(x==3 && (*r3)<(room_size/4))         //y stores index of room in room[]
+			{
+				y = *r3;
+				(*r3)++;
+			}
+			else if(x==4 && (*r4)<(room_size/4))
+			{
+				y = *r4;
+				(*r4)++;
+			}
+
+
 			if(y<(room_size/4))			//if floor has vacant rooms
 			{
 				z=((x-1)*(room_size)/4)+y;		
