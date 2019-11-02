@@ -261,73 +261,72 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 		*r4 = 0;
 }
 
-void pref_lists(struct student old_stud[], int old_stud_size)
+void pref_lists(struct student stud[], int stud_size)
 {												//for creating preference lists
 	int i, j, x;
 	i=0;
-	while(i<old_stud_size)
+	while(i<stud_size)
 	{
 		x=0;						//index for preference list
 		j=0;
-		while(j<old_stud_size)
+		while(j<stud_size)
 		{
 			if(i!=j)
 			{
-				if(strcmp(old_stud[i].dept, old_stud[j].dept)==0 && old_stud[i].year==old_stud[j].year)
+				if(strcmp(stud[i].dept, stud[j].dept)==0 && stud[i].year==stud[j].year)
 				{											//same dept same year
-					old_stud.p.list[x]=old_stud[j].id;		//adding to preference list
+					stud.p.list[x]=stud[j].id;		//adding to preference list
 					x++;
 				}
 			}
 			j++;
-		}
-		j=0;
-		while(j<old_stud_size)
+		}	j=0;
+		while(j<stud_size)
 		{
 			if(i!=j)
 			{
-				if(strcmp(old_stud[i].dept, old_stud[j].dept)!=0 && old_stud[i].year==old_stud[j].year)
+				if(strcmp(stud[i].dept, stud[j].dept)!=0 && stud[i].year==stud[j].year)
 				{											//same year different dept
-					old_stud.p.list[x]=old_stud[j].id;
+					stud.p.list[x]=stud[j].id;
 					x++;
 				}
 			}
 			j++;
 		}
 		j=0;
-		while(j<old_stud_size)
+		while(j<stud_size)
 		{
 			if(i!=j)
 			{
-				if(strcmp(old_stud[i].year>old_stud[j].year)
+				if(strcmp(stud[i].year>stud[j].year)
 				{											//junior, any dept
-					old_stud.p.list[x]=old_stud[j].id;
+					stud.p.list[x]=stud[j].id;
 					x++;
 				}
 			}
 			j++;
 		}
 		j=0;
-		while(j<old_stud_size)
+		while(j<stud_size)
 		{
 			if(i!=j)
 			{
-				if(strcmp(old_stud[i].dept, old_stud[j].dept)==0&&old_stud[i].year<old_stud[j].year)
+				if(strcmp(stud[i].dept, stud[j].dept)==0&&stud[i].year<stud[j].year)
 				{											//senior, same dept
-					old_stud.p.list[x]=old_stud[j].id;
+					stud.p.list[x]=stud[j].id;
 					x++;
 				}
 			}
 			j++;
 		}
 		j=0;
-		while(j<old_stud_size)
+		while(j<stud_size)
 		{
 			if(i!=j)
 			{				
-				if(strcmp(old_stud[i].dept, old_stud[j].dept)!=0&&old_stud[i].year<old_stud[j].year)
+				if(strcmp(stud[i].dept, stud[j].dept)!=0&&stud[i].year<stud[j].year)
 				{											//senior, different year
-					old_stud.p.list[x]=old_stud[j].id;
+					stud.p.list[x]=stud[j].id;
 					x++;
 				}
 			}
@@ -355,32 +354,32 @@ int check_preference(struct student for_check, struct student existing, struct s
 	return ret_val;
 }
 
-void stable_combination(struct student old_stud[], int old_stud_size)
+void stable_combination(struct student stud[], int stud_size)
 {
 	int free_count, i, j, x, y, flag;
-	free_count=old_stud_size;
+	free_count=stud_size;
 	i=0;
 	while(free_count>0)
 	{
-		if(old_stud[i].roommate_id==-1)
+		if(stud[i].roommate_id==-1)
 		{
 			x=0;								//x stores index of preferrence list				
-			while(x<old_stud_size && flag==0)
+			while(x<stud_size && flag==0)
 			{
-				j=find_index(old_stud, old_stud_size, old_stud[i].p.list[x]);		//index of wanted roommate
-				if(old_stud[j].roommate_id==-1)
+				j=find_index(stud, stud_size, stud[i].p.list[x]);		//index of wanted roommate
+				if(stud[j].roommate_id==-1)
 				{												//if j is free, both are assigned as roommates
-					old_stud[i].roommate_id=old_stud[j].id;
-					old_stud[j].roommate_id=old_stud[i].id;
+					stud[i].roommate_id=stud[j].id;
+					stud[j].roommate_id=stud[i].id;
 					flag=1;
 					free_count--;
 				}
-				else if(check_pref(old_stud[j], old_stud[j].roommate_id, old_stud[i])
+				else if(check_pref(stud[j], stud[j].roommate_id, stud[i])
 				{													//if j prefers i more than current roommate
-					y=find_index(old_stud, old_stud_size, old_stud[j].roommate_id);
-					old_stud[y].roommate_id=-1;						//freeing current roommate
-					old_stud[i].roommate_id=old_stud[j].id;			//assigning new roommates
-					old_stud[j].roommate_id=old_stud[i].id;
+					y=find_index(stud, stud_size, stud[j].roommate_id);
+					stud[y].roommate_id=-1;						//freeing current roommate
+					stud[i].roommate_id=stud[j].id;			//assigning new roommates
+					stud[j].roommate_id=stud[i].id;
 					flag=1;
 					free_count--;
 				}
@@ -391,7 +390,7 @@ void stable_combination(struct student old_stud[], int old_stud_size)
 			}
 		}
 		i++;
-		if(i==old_stud_size)
+		if(i==stud_size)
 		{
 			i=0;
 		}
@@ -399,18 +398,18 @@ void stable_combination(struct student old_stud[], int old_stud_size)
 	return;
 }
 
-void assign_rooms(struct student old_stud[], struct room room[], int old_stud_size, int room_size)
+void assign_rooms(struct student stud[], struct room room[], int stud_size, int room_size)
 {						//to assign rooms and display roommates
 	int i, j, r;
 	r=0;				//index for rooms
-	for(i=0;i<old_stud_size;i++)
+	for(i=0;i<stud_size;i++)
 	{
-		if(old_stud[i].room_no==-1)
+		if(stud[i].room_no==-1)
 		{
-			j=find_index(old_stud, old_stud_size, old_stud[i].roommate_id);
-			old_stud[i].room_no=old_stud[j].room_no=room[r].room_no;
-			room[r].id1=old_stud[i].id;
-			room[r].id2=old_stud[j].id;
+			j=find_index(stud, stud_size, stud[i].roommate_id);
+			stud[i].room_no=stud[j].room_no=room[r].room_no;
+			room[r].id1=stud[i].id;
+			room[r].id2=stud[j].id;
 			room[r].vacancy=1;
 			r++;
 		}
