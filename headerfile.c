@@ -1,3 +1,4 @@
+#include "headerfile.h"
 void initialize_s(struct student s[],int size)                    // initilize data id=year=hostel_no=floor_no=room_no=id_roomate=-1, name=dept='\0'
 {
 	int i;
