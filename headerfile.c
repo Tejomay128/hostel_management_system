@@ -1,4 +1,6 @@
 #include "headerfile.h"
+
+
 void initialize_s(struct student s[],int size)                    // initilize data id=year=hostel_no=floor_no=room_no=id_roomate=-1, name=dept='\0'
 {
 	int i;
@@ -316,3 +318,87 @@ void pref_lists(struct student old_stud[], int old_stud_size)
 	}
 	return;
 }
+				  
+int check_preference(struct student for_check, struct student existing, struct student interested)
+{					
+	/* to check whether interested features higher in for_check's preferred list than existing */		
+	int i, ret_val;
+	i=0;
+	ret_val=0;		//existing is more preferred than interested
+	while(for_check.p.list[i]!=existing.id && ret_val==0)
+	{
+		if(for_check.p.list[i]==interest.id)
+		{
+			ret_val=1;		//interested is more preferred than existing
+		}
+		i++;
+	}
+	return ret_val;
+}
+
+void stable_combination(struct student old_stud[], int old_stud_size)
+{
+	int free_count, i, j, x, y, flag;
+	free_count=old_stud_size;
+	i=0;
+	while(free_count>0)
+	{
+		if(old_stud[i].roommate_id==-1)
+		{
+			x=0;								//x stores index of preferrence list				
+			while(x<old_stud_size && flag==0)
+			{
+				j=find_index(old_stud, old_stud_size, old_stud[i].p.list[x]);		//index of wanted roommate
+				if(old_stud[j].roommate_id==-1)
+				{												//if j is free, both are assigned as roommates
+					old_stud[i].roommate_id=old_stud[j].id;
+					old_stud[j].roommate_id=old_stud[i].id;
+					flag=1;
+					free_count--;
+				}
+				else if(check_pref(old_stud[j], old_stud[j].roommate_id, old_stud[i])
+				{													//if j prefers i more than current roommate
+					y=find_index(old_stud, old_stud_size, old_stud[j].roommate_id);
+					old_stud[y].roommate_id=-1;						//freeing current roommate
+					old_stud[i].roommate_id=old_stud[j].id;			//assigning new roommates
+					old_stud[j].roommate_id=old_stud[i].id;
+					flag=1;
+					free_count--;
+				}
+				else
+				{
+					x++;
+				}
+			}
+		}
+		i++;
+		if(i==old_stud_size)
+		{
+			i=0;
+		}
+	}
+	return;
+}
+
+void assign_rooms(struct student old_stud[], struct room room[], int old_stud_size, int room_size)
+{						//to assign rooms and display roommates
+	int i, j, r;
+	r=0;				//index for rooms
+	for(i=0;i<old_stud_size;i++)
+	{
+		if(old_stud[i].room_no==-1)
+		{
+			j=find_index(old_stud, old_stud_size, old_stud[i].roommate_id);
+			old_stud[i].room_no=old_stud[j].room_no=room[r].room_no;
+			room[r].id1=old_stud[i].id;
+			room[r].id2=old_stud[j].id;
+			room[r].vacancy=1;
+			r++;
+		}
+	}
+	for(i=0;i<room_size;i++)
+	{
+		printf("%d - %d\n", room[i].id1, room[i].id2);
+	}
+	return;
+}	
