@@ -71,6 +71,7 @@ int assign(struct student old_stud[],struct student new_stud[],int size, int *sh
 	for(i=0;i<size;i++)
 	{
 		old_stud[j]=diff_hostel[i];
+		j++;
 	}
 	return j;  									//the size of old_stud[] is returned
 }
@@ -205,5 +206,4 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 	(*r2)=2*((room_size/4)-(*r2));		//now *r2, *r3 and *r4 will store number of vacant seats in their respective floors
 	(*r3)=2*((room_size/4)-(*r3));
 	(*r4)=2*((room_size/4)-(*r4));
-	return;
 }
