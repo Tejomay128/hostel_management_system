@@ -1,6 +1,4 @@
 #include "headerfile.h"
-#define N 30
-#define K 24
 
 int main()
 {
