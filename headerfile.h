@@ -37,15 +37,16 @@ void initialize_r(struct room r[], int size, int floor_no);    					// initializ
 
 void display(struct student old_stud[],int size);
 
-int assign(struct student old_stud[], struct student new_stud[], int size, int *sh_c, int *ns_c, int *os_c, int *dh_c); //assigns the applications to four
-																												//different arrays according to their 
-																												//decreasing preferences of processing
+int assign(struct student old_stud[], struct student new_stud[], int size, int *sh_c, int *ns_c, int *os_c, int *dh_c); //assigns the applications to four different arrays according to their decreasing preferences																												//
 
 int new_stud_allocate(struct student new_stud[], struct room room[], int new_stud_size, int room_size); 	//allocates rooms to new applicants
 
 void old_stud_allocate(struct student old_stud[], struct room room[], int old_stud_size, int room_size, int *r2, int *r3, int *r4);	//allocates rooms to old students
 
 int find_index(struct student old_stud[], int size, int id);   //returns index where id is found, if not found returns -1
+
+
+void pref_lists(struct student old_stud[], int old_stud_size); 		//for making preference lists for stable combination
 
 int check_preference(struct student for_check, struct student existing, struct student interested); 	//to check whether interested features higher in for_check's preferred list than existing
 
