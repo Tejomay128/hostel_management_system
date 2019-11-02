@@ -33,7 +33,6 @@ int main()
 			roommate_pref_count++;
 		}
 	}
-
 	do 																			//question A
 	{
 		printf("1. Print no. of seats filled in each floor\n2. Print no.of students who got rooms as per their first preference(floor)\n");
@@ -42,7 +41,7 @@ int main()
 		scanf("%d",&choice);
 		switch(choice)
 		{
-			case 1 :	printf("\nNo. of seats filled in each floor: 1-> %d\n2-> %d\n3-> %d4-> %d",K-f1-2, K-f2, K-f3, K-f4);
+			case 1 :	printf("\nNo. of seats filled in each floor:\n1-> %d\n2-> %d\n3-> %d\n4-> %d",(K/4)-f1-4, (K/4)-f2, (K/4)-f3, (K/4)-f4);
 						break;
 
 			case 2 : 	printf("\nNo.of students who got rooms as per their floor preference: %d",floor_pref_count);
