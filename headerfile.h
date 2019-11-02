@@ -37,6 +37,8 @@ void initialize_r(struct room r[], int size, int floor_no);    					// initializ
 
 void display(struct student old_stud[],int size);
 
+int assign_all(struct student stud[], int size);			//assignment function for part B
+
 int assign(struct student old_stud[], struct student new_stud[], int size, int *sh_c, int *ns_c, int *os_c, int *dh_c); //assigns the applications to four different arrays according to their decreasing preferences																												//
 
 int new_stud_allocate(struct student new_stud[], struct room room[], int new_stud_size, int room_size); 	//allocates rooms to new applicants
