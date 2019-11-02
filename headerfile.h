@@ -32,6 +32,8 @@ void initialize_s(struct student s[], int size);      					// initilize data id=
 
 void initialize_r(struct room r[], int size, int floor_no);    					// initialize everything to -1 except room nos.,that will be assigned as per no. of floors available per floor
 
+void display(struct student old_stud[],int size);
+
 int assign(struct student old_stud[], struct student new_stud[], int size, int *sh_c, int *ns_c, int *os_c, int *dh_c); //assigns the applications to four
 																												//different arrays according to their 
 																												//decreasing preferences of processing
