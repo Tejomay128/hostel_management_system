@@ -1,5 +1,3 @@
-#include "headerfile.h"
-
 void initialize_s(struct student s[],int size)                    // initilize data id=year=hostel_no=floor_no=room_no=id_roomate=-1, name=dept='\0'
 {
 	int i;
@@ -12,29 +10,42 @@ void initialize_s(struct student s[],int size)                    // initilize d
 }
 
 void initialize_r(struct room r[],int size,int floor_no)                    // initialize everything to -1 except room nos.,that will be assigned as per no.
-{									    // of floors available per floor	
+{									    									// of floors available per floor	
 	int i;
 	for(i=0;i<size;i++)
 	{
 		r[i + (floor_no-1)*size].vacancy=-1;
 		r[i + (floor_no-1)*size].id1=-1;
 		r[i + (floor_no-1)*size].id2=-1;
-		r[i + (floor_no-1)*size].room_no=(1001*floor_no)+i;
+		r[i + (floor_no-1)*size].room_no=(1000*floor_no)+i+1;
 	}	
+}
+
+void display(struct student old_stud[],int size)
+{
+	int i;
+	printf("id\tname\tyear\tdept\thostel_no\tfloor_no\troom_no\troommate_id\tfloor_pref\troommate_pref");
+	for(i=0;i<size;i++)
+	printf("%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n",old_stud[i].id,old_stud[i].name,old_stud[i].year,old_stud[i].dept,old_stud[i].hostel_no,old_stud[i].floor_no,old_stud[i].room_no,old_stud[i].roommate_id,old_stud[i].p.floor_pref,old_stud[i].p.roommate_pref);
 }
 
 int assign(struct student old_stud[],struct student new_stud[],int size, int *sh_c, int *ns_c, int *os_c, int *dh_c) 	//assigns the applications to four
 {																														//different arrays according to their
 	FILE *f; 							    																			//decreasing preferences of processing
 	struct student st,same_hostel[size],out_stud[size],diff_hostel[size];
+	initialize_s(same_hostel,size);
+	initialize_s(out_stud,size);
+	initialize_s(diff_hostel,size);
 	int i,j,sh_count,ns_count,os_count,dh_count;
 	sh_count=ns_count=os_count=dh_count=0; 																		
 	f=fopen("student.dat","rb"); 															
 	while(fread(&st, sizeof(struct student), 1, f))
 	{
+		st.floor_no=st.room_no=st.roommate_id=-1;
 		if(st.hostel_no == 1)
 		{
 			same_hostel[sh_count]=st;
+			sh_count++;
 			(*sh_c)++;
 		}
 		else if(st.hostel_no == -1)
@@ -42,17 +53,20 @@ int assign(struct student old_stud[],struct student new_stud[],int size, int *sh
 			if(st.year == 1)
 			{
 				new_stud[ns_count]=st;
+				ns_count++;
 				(*ns_c)++;
 			}
 			else
 			{
 				out_stud[os_count]=st;
+				os_count++;
 				(*os_c)++;
 			}	
 		}
 		else 
 		{
 			diff_hostel[dh_count]=st;
+			dh_count++;
 			(*dh_c)++;
 		}
 	}
@@ -73,7 +87,7 @@ int assign(struct student old_stud[],struct student new_stud[],int size, int *sh
 		old_stud[j]=diff_hostel[i];
 		j++;
 	}
-	return j;  									//the size of old_stud[] is returned
+	return (dh_count+os_count+sh_count);  									//the size of old_stud[] is returned
 }
 
 int new_stud_allocate(struct student new_stud[], struct room room[], int new_stud_size, int room_size)
@@ -137,15 +151,20 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 	while(i<old_stud_size)		//for assigning roommates based on roommate preference
 	{
 		j=find_index(old_stud, old_stud_size, old_stud[i].p.roommate_pref);
-		if(old_stud[i].roommate_id==-1 && (old_stud[j].p.roommate_pref==old_stud[i].id || old_stud[j].roommate_id==-1))
-		{											//if both don't have roommates or if both are each others' preferred roommate
-			if(old_stud[j].roommate_id!=-1)
-			{										//if other guy has a roommate he does not prefer
-				x=find_index(old_stud, old_stud_size, old_stud[j].roommate_id);
-				old_stud[x].roommate_id=-1;
+		if(old_stud[i].roommate_id == -1)          //if student has no room partner				
+		{
+			if(old_stud[j].roommate_id == -1)       // if both students dont have a roompartner
+			{
+				old_stud[i].roommate_id=old_stud[j].id;
+				old_stud[j].roommate_id=old_stud[i].id;
 			}
-			old_stud[i].roommate_id=old_stud[j].id;		//assigning them as roommates
-			old_stud[j].roommate_id=old_stud[i].id;
+			else if(old_stud[j].p.roommate_pref == old_stud[i].id)    //if j has a roompartner but he prefers i 
+			{
+				x=find_index(old_stud,old_stud_size,old_stud[j].roommate_id);
+				old_stud[x].roommate_id=-1;
+				old_stud[i].roommate_id=old_stud[j].id;
+				old_stud[j].roommate_id=old_stud[i].id;
+			}
 		}
 		i++;
 	}
@@ -156,9 +175,9 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 		{
 			j=i+1;
 			x=0;
-			while(j<old_stud_size && x==0 && old_stud[j].roommate_id==-1)
+			while(j<old_stud_size && x==0)
 			{
-				if(old_stud[i].p.floor_pref==old_stud[j].p.floor_pref)
+				if(old_stud[i].p.floor_pref==old_stud[j].p.floor_pref && old_stud[j].roommate_id==-1)
 				{												//if both prefer same floor
 					old_stud[i].roommate_id=old_stud[j].id;		//assigning them as roommates
 					old_stud[j].roommate_id=old_stud[i].id;
@@ -173,41 +192,52 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 	i=0;
 	while(i<old_stud_size)		//for assigning rooms to roommate pairs
 	{
-		if(old_stud[i].room_no==-1)
+		if(old_stud[i].room_no==-1 && old_stud[i].roommate_id != -1)
 		{
 			j=find_index(old_stud, old_stud_size, old_stud[i].roommate_id);
 			x=old_stud[i].p.floor_pref;		                //checking for floor preference      
 			
-			if(x==2 && (*r2)<(room_size/4))
+			if(x==2)
 			{
 				y = *r2;
 				(*r2)++;
 			}
-			else if(x==3 && (*r3)<(room_size/4))         //y stores index of room in room[]
+			else if(x==3)         //y stores index of room in room[]
 			{
 				y = *r3;
 				(*r3)++;
 			}
-			else if(x==4 && (*r4)<(room_size/4))
+			else if(x==4)
 			{
 				y = *r4;
 				(*r4)++;
 			}
-			z=((x-1)*(room_size)/4)+y;		
-			room[z].id1=old_stud[i].id;		//updating room and student details
-			room[z].id2=old_stud[j].id;
-			room[z].vacancy=1;
-			old_stud[i].hostel_no=old_stud[j].hostel_no=1;
-			old_stud[i].floor_no=old_stud[j].floor_no=x;
-			old_stud[i].room_no=old_stud[j].room_no=room[z].room_no;
+			if((x==2 && (*r2)<=(room_size/4)) || (x==3 && (*r3)<=(room_size/4)) || (x==4 && (*r4)<=(room_size/4)) ) //checks whether rooms are available or not
+			{
+				z=((x-1)*(room_size)/4)+y;		
+				room[z].id1=old_stud[i].id;		//updating room and student details
+				room[z].id2=old_stud[j].id;
+				room[z].vacancy=1;
+				old_stud[i].hostel_no=old_stud[j].hostel_no=1;
+				old_stud[i].floor_no=old_stud[j].floor_no=x;
+				old_stud[i].room_no=old_stud[j].room_no=room[z].room_no;
+			}
 		}
 		i++;
 	}
-	(*r2)=2*((room_size/4)-(*r2));		//now *r2, *r3 and *r4 will store number of vacant seats in their respective floors
-	(*r3)=2*((room_size/4)-(*r3));
-	(*r4)=2*((room_size/4)-(*r4));
+	if((*r2)<=(room_size/4))
+		(*r2)=2*((room_size/4)-(*r2));
+	else										//now *r2, *r3 and *r4 will store number of vacant seats in their respective floors
+		*r2 = 0;
+	if((*r3)<=(room_size/4))
+		(*r3)=2*((room_size/4)-(*r3));
+	else
+		*r3 = 0;
+	if((*r4)<=(room_size/4))
+		(*r4)=2*((room_size/4)-(*r4));
+	else
+		*r4 = 0;
 }
-
 
 void pref_lists(struct student old_stud[], int old_stud_size)
 {												//for creating preference lists
@@ -221,7 +251,7 @@ void pref_lists(struct student old_stud[], int old_stud_size)
 		{
 			if(i!=j)
 			{
-				if(strcmp(old_stud[i].dept, old_stud[j].dept)==0&&old_stud[i].year==old_stud[j].year)
+				if(strcmp(old_stud[i].dept, old_stud[j].dept)==0 && old_stud[i].year==old_stud[j].year)
 				{											//same dept same year
 					old_stud.p.list[x]=old_stud[j].id;		//adding to preference list
 					x++;
@@ -234,7 +264,7 @@ void pref_lists(struct student old_stud[], int old_stud_size)
 		{
 			if(i!=j)
 			{
-				if(strcmp(old_stud[i].dept, old_stud[j].dept)!=0&&old_stud[i].year==old_stud[j].year)
+				if(strcmp(old_stud[i].dept, old_stud[j].dept)!=0 && old_stud[i].year==old_stud[j].year)
 				{											//same year different dept
 					old_stud.p.list[x]=old_stud[j].id;
 					x++;
