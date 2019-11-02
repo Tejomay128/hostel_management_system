@@ -32,6 +32,25 @@ void display(struct student old_stud[],int size)
 	printf("%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n",old_stud[i].id,old_stud[i].name,old_stud[i].year,old_stud[i].dept,old_stud[i].hostel_no,old_stud[i].floor_no,old_stud[i].room_no,old_stud[i].roommate_id,old_stud[i].p.floor_pref,old_stud[i].p.roommate_pref);
 }
 
+int assign_all(struct student stud[], int size)			//assignment function for part B
+{
+	FILE *f;
+	struct student st;																
+	f=fopen("student.dat","rb"); 	
+	int i=0;														
+	while(fread(&st, sizeof(struct student), 1, f))
+	{
+		if(st.year!=1)
+		{
+			st.floor_no=st.room_no=st.roommate_id=-1;
+			stud[i]=st;
+			i++;
+		}
+	}
+	fclose(f);
+	return i;
+}
+
 int assign(struct student old_stud[],struct student new_stud[],int size, int *sh_c, int *ns_c, int *os_c, int *dh_c) 	//assigns the applications to four
 {																														//different arrays according to their
 	FILE *f; 							    																			//decreasing preferences of processing
