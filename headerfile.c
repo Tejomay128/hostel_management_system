@@ -207,3 +207,81 @@ void old_stud_allocate(struct student old_stud[], struct room room[], int old_st
 	(*r3)=2*((room_size/4)-(*r3));
 	(*r4)=2*((room_size/4)-(*r4));
 }
+
+
+void pref_lists(struct student old_stud[], int old_stud_size)
+{												//for creating preference lists
+	int i, j, x;
+	i=0;
+	while(i<old_stud_size)
+	{
+		x=0;						//index for preference list
+		j=0;
+		while(j<old_stud_size)
+		{
+			if(i!=j)
+			{
+				if(strcmp(old_stud[i].dept, old_stud[j].dept)==0&&old_stud[i].year==old_stud[j].year)
+				{											//same dept same year
+					old_stud.p.list[x]=old_stud[j].id;		//adding to preference list
+					x++;
+				}
+			}
+			j++;
+		}
+		j=0;
+		while(j<old_stud_size)
+		{
+			if(i!=j)
+			{
+				if(strcmp(old_stud[i].dept, old_stud[j].dept)!=0&&old_stud[i].year==old_stud[j].year)
+				{											//same year different dept
+					old_stud.p.list[x]=old_stud[j].id;
+					x++;
+				}
+			}
+			j++;
+		}
+		j=0;
+		while(j<old_stud_size)
+		{
+			if(i!=j)
+			{
+				if(strcmp(old_stud[i].year>old_stud[j].year)
+				{											//junior, any dept
+					old_stud.p.list[x]=old_stud[j].id;
+					x++;
+				}
+			}
+			j++;
+		}
+		j=0;
+		while(j<old_stud_size)
+		{
+			if(i!=j)
+			{
+				if(strcmp(old_stud[i].dept, old_stud[j].dept)==0&&old_stud[i].year<old_stud[j].year)
+				{											//senior, same dept
+					old_stud.p.list[x]=old_stud[j].id;
+					x++;
+				}
+			}
+			j++;
+		}
+		j=0;
+		while(j<old_stud_size)
+		{
+			if(i!=j)
+			{				
+				if(strcmp(old_stud[i].dept, old_stud[j].dept)!=0&&old_stud[i].year<old_stud[j].year)
+				{											//senior, different year
+					old_stud.p.list[x]=old_stud[j].id;
+					x++;
+				}
+			}
+			j++;
+		}
+		i++;
+	}
+	return;
+}
