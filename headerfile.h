@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <string.h>
+#define N 30
+#define K 24
 
 struct preference				//only for 2nd,3rd and 4th year students
 {
 	int floor_pref;		
-	int roommate_pref;	
+	int roommate_pref;
+	int list[N];
 };
 
 struct room 					//room data
@@ -43,3 +46,9 @@ int new_stud_allocate(struct student new_stud[], struct room room[], int new_stu
 void old_stud_allocate(struct student old_stud[], struct room room[], int old_stud_size, int room_size, int *r2, int *r3, int *r4);	//allocates rooms to old students
 
 int find_index(struct student old_stud[], int size, int id);   //returns index where id is found, if not found returns -1
+
+int check_preference(struct student for_check, struct student existing, struct student interested); 	//to check whether interested features higher in for_check's preferred list than existing
+
+void stable_combination(struct student old_stud[], int old_stud_size);		//to assign roommates based on stable combination
+
+void assign_rooms(struct student old_stud[], struct room room[], int old_stud_size, int room_size);		//to assign rooms based on stable combination and display roommates
