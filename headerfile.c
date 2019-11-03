@@ -3,12 +3,16 @@
 
 void initialize_s(struct student s[],int size)                    // initilize data id=year=hostel_no=floor_no=room_no=id_roomate=-1, name=dept='\0'
 {
-	int i;
+	int i, j;
 	for(i=0;i<size;i++)
 	{
-		s[i].id=s[i].year=s[i].hostel_no=s[i].floor_no=s[i].room_no=s[i].roommate_id=-1;
+		s[i].id=s[i].year=s[i].hostel_no=s[i].floor_no=s[i].room_no=s[i].roommate_id=s[i].p.floor_pref=s[i].p.roommate_pref=-1;
 		s[i].name[0]='\0';
 		s[i].dept[0]='\0';
+		for(j=0;j<N;j++)
+		{
+			s[i].p.list[j]=-1;
+		}
 	}	
 }
 
@@ -32,23 +36,40 @@ void display(struct student old_stud[],int size)
 	printf("%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n",old_stud[i].id,old_stud[i].name,old_stud[i].year,old_stud[i].dept,old_stud[i].hostel_no,old_stud[i].floor_no,old_stud[i].room_no,old_stud[i].roommate_id,old_stud[i].p.floor_pref,old_stud[i].p.roommate_pref);
 }
 
+
 int assign_all(struct student stud[], int size)			//assignment function for part B
 {
 	FILE *f;
 	struct student st;																
-	f=fopen("student.dat","rb"); 	
-	int i=0;														
+	f=fopen("student.dat","rb");	
+	int i, j, count=0;
+	i=0;														
 	while(fread(&st, sizeof(struct student), 1, f)) 
 	{
+		st.floor_no=st.room_no=st.roommate_id=-1;
 		if(st.year!=1)
 		{
-			st.floor_no=st.room_no=st.roommate_id=-1;
-			stud[i]=st;
+			stud[i].floor_no=stud[i].room_no=stud[i].roommate_id=-1;
+			for(j=0;j<30;j++)
+			{
+				stud[i].p.list[j]=-1;
+			}
+			strcpy(stud[i].name, st.name);
+			stud[i].id=st.id;
+			stud[i].year=st.year;
+			strcpy(stud[i].dept, st.dept);
+			stud[i].p.floor_pref=st.p.floor_pref;
+			stud[i].p.roommate_pref=st.p.roommate_pref;
+			stud[i].hostel_no=st.hostel_no;
 			i++;
+		}
+		else
+		{
+			count++;		//stores count of first years
 		}
 	}
 	fclose(f);
-	return i;
+	return count;
 }
 
 int assign(struct student old_stud[],struct student new_stud[],int size, int *sh_c, int *ns_c, int *os_c, int *dh_c) 	//assigns the applications to four
@@ -333,6 +354,10 @@ void pref_lists(struct student stud[], int stud_size)
 			}
 			j++;
 		}
+		for(j=stud_size;j<N;j++)
+		{
+			stud[i].p.list[j]=0;
+		}
 		i++;
 	}
 	return;
@@ -344,7 +369,7 @@ int check_pref(struct student for_check, int existing_id, struct student interes
 	int i, ret_val;
 	i=0;
 	ret_val=0;		//existing is more preferred than interested
-	while(for_check.p.list[i]!=existing_id && ret_val==0)
+	while(for_check.p.list[i]!=existing_id && ret_val==0 && i<N)
 	{
 		if(for_check.p.list[i]==interested.id)
 		{
@@ -360,7 +385,7 @@ void stable_combination(struct student stud[], int stud_size)
 	int free_count, i, j, x, y, flag;
 	free_count=stud_size;
 	i=0;
-	while(free_count>1)
+	while(free_count>0)
 	{
 		if(stud[i].roommate_id==-1)
 		{
@@ -374,7 +399,7 @@ void stable_combination(struct student stud[], int stud_size)
 					stud[i].roommate_id=stud[j].id;
 					stud[j].roommate_id=stud[i].id;
 					flag=1;
-					free_count--;
+					free_count=free_count-2;
 				}
 				else if(check_pref(stud[j], stud[j].roommate_id, stud[i]))
 				{													//if j prefers i more than current roommate
@@ -402,8 +427,9 @@ void stable_combination(struct student stud[], int stud_size)
 
 void assign_rooms(struct student stud[], struct room room[], int stud_size, int room_size)
 {						//to assign rooms and display roommates
-	int i, j, r;
+	int i, j, r, count;
 	r=0;				//index for rooms
+	count=0;
 	for(i=0;i<stud_size;i++)
 	{
 		if(stud[i].room_no==-1)
@@ -414,9 +440,10 @@ void assign_rooms(struct student stud[], struct room room[], int stud_size, int 
 			room[r].id2=stud[j].id;
 			room[r].vacancy=1;
 			r++;
+			count++;
 		}
 	}
-	for(i=0;i<room_size;i++)
+	for(i=0;i<count;i++)
 	{
 		printf("%d - %d\n", room[i].id1, room[i].id2);
 	}
