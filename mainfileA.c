@@ -56,6 +56,7 @@ int main()
 			default : 	printf("\nWrong choice.");		
 		}
 		printf("\n\nDo you want to repeat? (y/n):");
+		while ((getchar()) != '\n'); 	//to clear input buffer
 		scanf("%c",&repeat);
 	}while(repeat == 'y' || repeat == 'Y');
 	return 0;
