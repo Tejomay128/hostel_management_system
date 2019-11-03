@@ -1,4 +1,4 @@
-#include "headerfile.h"
+#include"headerfile.h"
 
 int main()
 {
@@ -11,9 +11,9 @@ int main()
 	initialize_r(room,K/8,3);
 	initialize_r(room,K/8,4);
 	size=assign_all(stud, N);
-	pref_lists(stud, size);
-  stable_combination(stud, size);
-  printf("Based on the student data, the stable combinations are: ");
-  assign_rooms(stud, room, size, K);
+	pref_lists(stud, N-size);
+	stable_combination(stud, N-size);
+  	printf("Based on the student data, the stable combinations are:\n");
+  	assign_rooms(stud, room, N-size, K);
 	return 0;
 }
