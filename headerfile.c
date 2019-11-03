@@ -38,7 +38,7 @@ int assign_all(struct student stud[], int size)			//assignment function for part
 	struct student st;																
 	f=fopen("student.dat","rb"); 	
 	int i=0;														
-	while(fread(&st, sizeof(struct student), 1, f))
+	while(fread(&st, sizeof(struct student), 1, f)) 
 	{
 		if(st.year!=1)
 		{
@@ -275,19 +275,20 @@ void pref_lists(struct student stud[], int stud_size)
 			{
 				if(strcmp(stud[i].dept, stud[j].dept)==0 && stud[i].year==stud[j].year)
 				{											//same dept same year
-					stud.p.list[x]=stud[j].id;		//adding to preference list
+					stud[i].p.list[x]=stud[j].id;		//adding to preference list
 					x++;
 				}
 			}
 			j++;
-		}	j=0;
+		}	
+		j=0;
 		while(j<stud_size)
 		{
 			if(i!=j)
 			{
 				if(strcmp(stud[i].dept, stud[j].dept)!=0 && stud[i].year==stud[j].year)
 				{											//same year different dept
-					stud.p.list[x]=stud[j].id;
+					stud[i].p.list[x]=stud[j].id;
 					x++;
 				}
 			}
@@ -298,9 +299,9 @@ void pref_lists(struct student stud[], int stud_size)
 		{
 			if(i!=j)
 			{
-				if(strcmp(stud[i].year>stud[j].year)
+				if(stud[i].year>stud[j].year)
 				{											//junior, any dept
-					stud.p.list[x]=stud[j].id;
+					stud[i].p.list[x]=stud[j].id;
 					x++;
 				}
 			}
@@ -311,9 +312,9 @@ void pref_lists(struct student stud[], int stud_size)
 		{
 			if(i!=j)
 			{
-				if(strcmp(stud[i].dept, stud[j].dept)==0&&stud[i].year<stud[j].year)
+				if(strcmp(stud[i].dept, stud[j].dept)==0 && stud[i].year<stud[j].year)
 				{											//senior, same dept
-					stud.p.list[x]=stud[j].id;
+					stud[i].p.list[x]=stud[j].id;
 					x++;
 				}
 			}
@@ -324,9 +325,9 @@ void pref_lists(struct student stud[], int stud_size)
 		{
 			if(i!=j)
 			{				
-				if(strcmp(stud[i].dept, stud[j].dept)!=0&&stud[i].year<stud[j].year)
+				if(strcmp(stud[i].dept, stud[j].dept)!=0 && stud[i].year<stud[j].year)
 				{											//senior, different year
-					stud.p.list[x]=stud[j].id;
+					stud[i].p.list[x]=stud[j].id;
 					x++;
 				}
 			}
@@ -337,15 +338,15 @@ void pref_lists(struct student stud[], int stud_size)
 	return;
 }
 				  
-int check_preference(struct student for_check, struct student existing, struct student interested)
+int check_pref(struct student for_check, int existing_id, struct student interested)
 {					
 	/* to check whether interested features higher in for_check's preferred list than existing */		
 	int i, ret_val;
 	i=0;
 	ret_val=0;		//existing is more preferred than interested
-	while(for_check.p.list[i]!=existing.id && ret_val==0)
+	while(for_check.p.list[i]!=existing_id && ret_val==0)
 	{
-		if(for_check.p.list[i]==interest.id)
+		if(for_check.p.list[i]==interested.id)
 		{
 			ret_val=1;		//interested is more preferred than existing
 		}
@@ -359,11 +360,12 @@ void stable_combination(struct student stud[], int stud_size)
 	int free_count, i, j, x, y, flag;
 	free_count=stud_size;
 	i=0;
-	while(free_count>0)
+	while(free_count>1)
 	{
 		if(stud[i].roommate_id==-1)
 		{
-			x=0;								//x stores index of preferrence list				
+			x=0;
+			flag=0;								//x stores index of preferrence list				
 			while(x<stud_size && flag==0)
 			{
 				j=find_index(stud, stud_size, stud[i].p.list[x]);		//index of wanted roommate
@@ -374,7 +376,7 @@ void stable_combination(struct student stud[], int stud_size)
 					flag=1;
 					free_count--;
 				}
-				else if(check_pref(stud[j], stud[j].roommate_id, stud[i])
+				else if(check_pref(stud[j], stud[j].roommate_id, stud[i]))
 				{													//if j prefers i more than current roommate
 					y=find_index(stud, stud_size, stud[j].roommate_id);
 					stud[y].roommate_id=-1;						//freeing current roommate
@@ -419,4 +421,4 @@ void assign_rooms(struct student stud[], struct room room[], int stud_size, int 
 		printf("%d - %d\n", room[i].id1, room[i].id2);
 	}
 	return;
-}	
+}
