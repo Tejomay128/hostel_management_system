@@ -1,4 +1,6 @@
 #include "headerfile.h"
+#define N 30
+#define K 24
 
 int main()
 {
@@ -24,7 +26,7 @@ int main()
   	} 
   	i=0;
   	rooms_per_floor=K/8;
-  	while(i<N_size)
+  	while(i < N-size)
   	{
   		j=find_index(stud,size,stud[i].roommate_id);
   		if(tick[i] == 0)
@@ -35,10 +37,27 @@ int main()
   				for(l=1;l<=rooms_per_floor;l++)
   				{
   					printf("%d\t",1000*stud[i].p.floor_pref + l);
-  					
+  					tick[i]=1;
+  					tick[j]=1;
   				}
   			}
-  		}
+            else
+            {
+                for(l=1;l<=rooms_per_floor;l++)
+                {
+                    printf("%d\t",1000*stud[i].p.floor_pref + l);
+                    tick[i]=1;
+                    tick[j]=1;
+                }
+                printf("\n");
+                for(l=1;l<=rooms_per_floor;l++)
+                {
+                    printf("%d\t",1000*stud[j].p.floor_pref + l);
+                    tick[i]=1;
+                    tick[j]=1;
+                }
+            }
+      	}
   		i++;
   	}
 	return 0;
